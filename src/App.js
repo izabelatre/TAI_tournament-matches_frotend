@@ -55,6 +55,10 @@ class App extends React.Component {
         { name: 'Mehmet' },
         { name: 'Zerya Betül'},
       ],
+      selected: true,
+      selectedRowId: null,
+      currentRow: {},
+      selectedTournamentId: null
     };
 }
 
@@ -97,10 +101,27 @@ deleteTournament (data){
     <div className="App">
       <div style={{ maxWidth: '100%' }}>
             <MaterialTable
-            icons={tableIcons}
+              options={{
+                rowStyle: rowData => ({
+                  backgroundColor: rowData.tableData.id === this.state.selectedRowId 
+                      ? "#9bb8b3"
+                      : "#fff" 
+                  })
+              }}
+              icons={tableIcons}
               title="Tournaments"
               columns={this.state.columns_tournaments}
               data={Array.from(this.state.data_tournaments)}
+            
+            onRowClick={(event, rowData) => {
+              this.setState({ 
+                  currentRow: rowData, 
+                  selected: !this.state.selected,
+                  selectedRowId: rowData.tableData.id,
+                  selectedTournamentId: rowData.tournamentId
+                });
+              
+            }}
               editable={{
                 onRowAdd: newData =>
                   new Promise((resolve, reject) => {
